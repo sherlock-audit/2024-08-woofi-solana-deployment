@@ -42,14 +42,16 @@ pub struct WooPool {
     pub authority: Pubkey,     // 32
     pub wooracle: Pubkey,      // 32
 
-    // balance reserve
-    pub reserve: u128, // 16
     // 1 in 100000; 10 = 1bp = 0.01%; max = 65535
     pub fee_rate: u16, // 2
     // max range of `balance * k`
     pub max_gamma: u128, // 16
     // max volume per swap
     pub max_notional_swap: u128, // 16
+    // max balance cap in token amount
+    pub cap_bal: u128, // 16
+    // min from amount when swap
+    pub min_swap_amount: u128, // 16
 
     pub unclaimed_fee: u128,      // 16
     pub token_mint: Pubkey,       // 32
@@ -59,8 +61,6 @@ pub struct WooPool {
 }
 
 impl WooPool {
-    pub const LEN: usize = 8 + (32 + 1 + 32 + 32 + 16 + 2 + 16 + 16 + 16 + 32 + 32 + 32 + 1);
-
     pub fn seeds(&self) -> [&[u8]; 5] {
         [
             WOOPOOL_SEED.as_bytes(),
@@ -88,11 +88,12 @@ impl WooPool {
         self.authority = authority;
         self.wooracle = wooracle;
 
-        self.reserve = 0;
         self.fee_rate = 0;
         self.unclaimed_fee = 0;
         self.max_gamma = 0;
         self.max_notional_swap = 0;
+        self.cap_bal = 0;
+        self.min_swap_amount = 0;
 
         self.token_mint = token_mint;
         self.token_vault = token_vault;
@@ -125,21 +126,14 @@ impl WooPool {
         Ok(())
     }
 
-    pub fn add_reserve(&mut self, amount: u128) -> Result<()> {
-        self.reserve = self
-            .reserve
-            .checked_add(amount)
-            .ok_or(ErrorCode::ReserveMaxExceeded)?;
+    pub fn set_cap_bal(&mut self, cap_bal: u128) -> Result<()> {
+        self.cap_bal = cap_bal;
 
         Ok(())
     }
 
-    pub fn sub_reserve(&mut self, amount: u128) -> Result<()> {
-        if amount > self.reserve {
-            return Err(ErrorCode::ReserveNotEnough.into());
-        }
-
-        self.reserve -= amount;
+    pub fn set_min_swap_amount(&mut self, min_swap_amount: u128) -> Result<()> {
+        self.min_swap_amount = min_swap_amount;
 
         Ok(())
     }

@@ -70,28 +70,6 @@ pub struct Wooracle {
 }
 
 impl Wooracle {
-    pub const LEN: usize = 8
-        + (32
-            + 32
-            + 32
-            + 32
-            + 32
-            + 8
-            + 1
-            + 1
-            + 1
-            + 8
-            + 8
-            + 8
-            + 16
-            + 8
-            + 8
-            + 16
-            + 16
-            + 32
-            + 32
-            + 32);
-
     pub fn update_now(&mut self) -> Result<()> {
         self.updated_at = Clock::get()?.unix_timestamp;
         Ok(())
@@ -145,6 +123,12 @@ impl Wooracle {
         self.update_spread_for_new_price(price)?;
         self.update_price(price)?;
         self.update_now()?;
+        Ok(())
+    }
+
+    pub fn post_price_no_ts_update(&mut self, price: u128) -> Result<()> {
+        self.update_spread_for_new_price(price)?;
+        self.update_price(price)?;
         Ok(())
     }
 
