@@ -168,6 +168,14 @@ pub mod woofi {
         instructions::set_pool_state::set_max_notional_swap_handler(ctx, max_notional_swap)
     }
 
+    pub fn set_pool_cap_bal(ctx: Context<SetPoolState>, cap_bal: u128) -> Result<()> {
+        instructions::set_pool_state::set_cap_bal_handler(ctx, cap_bal)
+    }
+
+    pub fn set_pool_min_swap_amount(ctx: Context<SetPoolState>, min_swap_amount: u128) -> Result<()> {
+        instructions::set_pool_state::set_min_swap_amount_handler(ctx, min_swap_amount)
+    }
+
     pub fn try_query(ctx: Context<TryQuery>, from_amount: u128) -> Result<QueryResult> {
         instructions::try_query::handler(ctx, from_amount)
     }

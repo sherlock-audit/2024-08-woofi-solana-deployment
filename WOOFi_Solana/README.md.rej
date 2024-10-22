@@ -1,0 +1,28 @@
+diff a/WOOFi_Solana/README.md b/WOOFi_Solana/README.md	(rejected hunks)
+@@ -6,7 +6,7 @@ This repository contains the Rust smart contract as well as the Typescript SDK (
+ ## Requirements
+ 
+ - Anchor 0.29.0
+-- Solana 1.17.22
++- Solana 1.17.31
+ - Rust 1.72.0
+ 
+ ## Setup
+@@ -18,9 +18,13 @@ Set up a valid Solana keypair at the path specified in the `wallet` in `Anchor.t
+ ## Usage
+ 
+ ```
++// Install dependencies
++yarn
++
++// Build
+ anchor build
+-```
+ 
+-```
++// Tests
++// NOTE: make sure Solana is setting up with Localnet.
+ anchor test
+-```
+\ No newline at end of file
++```
